@@ -1,30 +1,17 @@
 <template>
 	<div id="app">
-		<Layout v-if="!routerCheck">
-			<template v-slot:content>
-				<router-view></router-view>
-			</template>
-		</Layout>
-
-		<router-view v-else></router-view>
+		<Schedule />
 	</div>
 </template>
 
 <script>
-import Layout from '@/components/layouts/Layout.vue';
+import Schedule from '@/views/Schedule.vue';
 export default {
 	components: {
-		Layout,
-	},
-	computed: {
-		routerCheck() {
-			let path = this.$route.path;
-			return path === '/' || path === '/login' || path === '/signup';
-		},
+		Schedule,
 	},
 };
 </script>
-
 <style lang="scss">
 html {
 	width: 100%;
@@ -38,5 +25,8 @@ body {
 	background: #f4f7fa;
 	width: 100%;
 	min-height: 100vh;
+}
+a:hover {
+	text-decoration: none;
 }
 </style>
