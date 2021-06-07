@@ -47,22 +47,25 @@
 							>
 								<ul class="schedule_box">
 									<!-- 등록된 강의 목록 -->
-									<li v-for="(list, idx) in scheduleList[day]" :key="idx">
-										<div
-											class="lecture-time"
-											:class="[list.options.range_time, list.options.start]"
-											:data-event="`lecture-${list.options.code}`"
-											@click="editLecture(list, day)"
-										>
-											<a href="#">
-												<div class="lecture-info">
-													<h6 class="lecture-title">
-														{{ list.lecture }}
-													</h6>
-													<h6 class="lecture-location">{{ list.location }}</h6>
-												</div>
+									<template v-if="scheduleList">
+										<li v-for="(list, idx) in scheduleList[day]" :key="idx">
+											<div
+												class="lecture-time"
+												:class="[list.options.range_time, list.options.start]"
+												:data-event="`lecture-${list.options.code}`"
+												@click="editLecture(list, day)"
+											>
+												<a href="#">
+													<div class="lecture-info">
+														<h6 class="lecture-title">
+															{{ list.lecture }}
+														</h6>
+														<h6 class="lecture-location">
+															{{ list.location }}
+														</h6>
+													</div>
 
-												<!-- <template v-if="currentSchedule[day].memo.length > 0">
+													<!-- <template v-if="currentSchedule[day].memo.length > 0">
 													<div
 														v-for="memo in currentSchedule[day].memo"
 														:key="memo"
@@ -80,9 +83,10 @@
 														>
 													</div>
 												</template> -->
-											</a>
-										</div>
-									</li>
+												</a>
+											</div>
+										</li>
+									</template>
 								</ul>
 							</li>
 						</template>
@@ -116,9 +120,10 @@ export default {
 
 		scheduleList() {
 			let _this = this;
+
 			// 등록된 강의 목록
 			this.days.forEach(function(item) {
-				_this.$store.getters.eachDaySchedule[item].forEach(function(list) {
+				_this.$store.getters.scheduleTable[item].forEach(function(list) {
 					let options = {};
 					let range_time = list.end_time - list.start_time;
 					let start = list.start_time;
@@ -132,7 +137,7 @@ export default {
 				});
 			});
 
-			return this.$store.getters.eachDaySchedule;
+			return this.$store.getters.scheduleTable;
 		},
 	},
 };

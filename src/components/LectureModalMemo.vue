@@ -50,8 +50,9 @@
 							</div>
 							<div class="lecture-memo">
 								<h5 class="memo-header">메모</h5>
-								<ul>
-									<li class="memo-list">
+
+								<ul v-for="(list, idx) in memoList" :key="idx">
+									<li class="memo-list" v-if="list.code == currentLecture.code">
 										<div
 											class="memo-content"
 											data-toggle="tooltip"
@@ -60,7 +61,7 @@
 											data-original-title="과제 설명 텍스트 과제 설명 텍스트 과제 설명 텍스트"
 										>
 											<i class="material-icons ic-lecture-noti">assignment</i>
-											<span class="lecture-noti-title">과제 제목 텍스트</span>
+											<span class="lecture-noti-title">{{ list.title }}</span>
 										</div>
 										<div class="memo-btn">
 											<a href=""
@@ -146,14 +147,17 @@ export default {
 		currentLecture() {
 			return this.$store.state.select_lecture;
 		},
+		memoList() {
+			return this.$store.state.schedule_list[this.$store.state.select_day];
+		},
 	},
 	methods: {
 		addMemo: function(val) {
 			let _this = this;
 			console.log(val);
 			let day = this.$store.state.select_day;
-			console.log(this.$store.getters.eachDaySchedule[day]);
-			this.$store.getters.eachDaySchedule[day].forEach(function(item) {
+			console.log(this.$store.getters.scheduleTable[day]);
+			this.$store.getters.scheduleTable[day].forEach(function(item) {
 				if (item.code == _this.currentLecture.code) {
 					item.memo.push(val);
 				}

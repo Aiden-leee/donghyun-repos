@@ -100,7 +100,7 @@ export default {
 	data() {
 		return {
 			days: ['월', '화', '수', '목', '금'],
-			add_data: ['monday', 'tue', 'wed', 'thu', 'fri'],
+			add_data: ['mon', 'tue', 'wed', 'thu', 'fri'],
 		};
 	},
 	filters: {
@@ -108,12 +108,15 @@ export default {
 		dayFilterFormat,
 	},
 	computed: {
+		// 팝업 상태값
 		isShow() {
 			return this.$store.state.lecture_popup;
 		},
+		// 중복되는 강의시 알림 팝업 상태값
 		isOverlap() {
 			return this.$store.state.overlap_lecture;
 		},
+		// 현재 선택된 강의
 		currentLecture() {
 			return this.$store.state.select_lecture;
 		},
@@ -123,45 +126,18 @@ export default {
 			this.$store.commit('SET_LECTURE_POPUP_STATUS', false);
 			this.$store.commit('SET_OVERLAP_STATUS', false);
 		},
-		eachDayListFunc: function() {
-			let _this = this;
-			// 각각의 요일에 강의 데이터 넣기
-			let store = this.$store.state;
-			let day_schedule_list = {
-				monday: [],
-				tue: [],
-				wed: [],
-				thu: [],
-				fri: [],
-			};
-
-			store.schedule.forEach(function(item) {
-				let options = {};
-				options.day_index = [];
-				let day = item.dayofweek.split('');
-				day.forEach(function(d) {
-					let idx = _this.days.indexOf(d);
-					options.day_index.push(idx);
-				});
-
-				options.day_index.forEach(function(d) {
-					day_schedule_list[_this.add_data[d]].push(item);
-				});
-			});
-			return day_schedule_list;
-		},
 		overlapFunc: function() {
 			let _this = this;
 			let store = this.$store.state;
 			let overlap = false; // 겹침 여부
 			let day_index = []; // 선택된강의 요일
-			let day = store.select_lecture.dayofweek.split('');
+			let day = this.currentLecture.dayofweek.split('');
 			day.forEach(function(d) {
 				let idx = _this.days.indexOf(d);
 				day_index.push(idx);
 			});
 
-			let each_day_list = this.eachDayListFunc();
+			let each_day_list = this.$store.getters.scheduleTable;
 
 			// 요일
 			day_index.forEach(function(d) {
