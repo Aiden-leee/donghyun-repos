@@ -98,10 +98,7 @@
 import { timeFilterFormat, dayFilterFormat } from '@/utils/filters.js';
 export default {
 	data() {
-		return {
-			days: ['월', '화', '수', '목', '금'],
-			add_data: ['mon', 'tue', 'wed', 'thu', 'fri'],
-		};
+		return {};
 	},
 	filters: {
 		timeFilterFormat,
@@ -127,13 +124,14 @@ export default {
 			this.$store.commit('SET_OVERLAP_STATUS', false);
 		},
 		overlapFunc: function() {
-			let _this = this;
 			let store = this.$store.state;
+			let days = ['월', '화', '수', '목', '금'];
+			let add_data = ['mon', 'tue', 'wed', 'thu', 'fri'];
 			let overlap = false; // 겹침 여부
 			let day_index = []; // 선택된강의 요일
 			let day = this.currentLecture.dayofweek.split('');
 			day.forEach(function(d) {
-				let idx = _this.days.indexOf(d);
+				let idx = days.indexOf(d);
 				day_index.push(idx);
 			});
 
@@ -143,7 +141,7 @@ export default {
 			day_index.forEach(function(d) {
 				let arr = [];
 				let s_time = []; // 선택강의 시간
-				each_day_list[_this.add_data[d]].forEach(function(item) {
+				each_day_list[add_data[d]].forEach(function(item) {
 					let time = []; // 등록된 시간
 					time.push(item.start_time, item.end_time);
 					arr.push(time);
@@ -183,7 +181,6 @@ export default {
 			this.$store.commit('ADD_LECTURE_LIST', list);
 		},
 	},
-	mounted() {},
 };
 </script>
 

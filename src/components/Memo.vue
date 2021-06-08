@@ -10,6 +10,7 @@
 					id="recipient-name"
 					placeholder="제목 추가"
 					@input="setTitle"
+					:value="title"
 					autocomplete="off"
 				/>
 			</label>
@@ -22,6 +23,7 @@
 				rows="4"
 				placeholder="설명 추가"
 				@input="setTextarea"
+				:value="textarea"
 				autocomplete="off"
 			></textarea>
 		</div>
@@ -56,6 +58,8 @@ export default {
 			val.title = this.title;
 			val.des = this.textarea;
 			this.$emit('addMemo', val);
+			this.title = '';
+			this.textarea = '';
 		},
 	},
 };

@@ -11,6 +11,7 @@ export default new Vuex.Store({
 		overlap_lecture: false, // 강의 겹침 상태값
 		select_lecture: [], // 현재 선택된 강의
 		select_day: '', // 현재 선택된 강의 요일
+		// 등록된 강의목록 요일 별로 변환
 		schedule_list: {
 			mon: [],
 			tue: [],
@@ -59,6 +60,7 @@ export default new Vuex.Store({
 			});
 
 			state.lecture_memo_popup = false;
+			state.select_lecture = [];
 		},
 		// 스케쥴에 강의 등록
 		ADD_LECTURE_LIST: function(state, payload) {
@@ -72,7 +74,6 @@ export default new Vuex.Store({
 				return el.code == payload.list.code;
 			});
 			if (!result) {
-				// state.schedule.push(payload.list);
 				transform_list(payload.list);
 			}
 
@@ -81,6 +82,7 @@ export default new Vuex.Store({
 				let add_data = ['mon', 'tue', 'wed', 'thu', 'fri'];
 				let options = {};
 				options.day_index = [];
+				data.memo = [];
 				let day = data.dayofweek.split('');
 				day.forEach(function(d) {
 					let idx = days.indexOf(d);

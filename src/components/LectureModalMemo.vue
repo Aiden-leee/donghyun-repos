@@ -50,26 +50,40 @@
 							</div>
 							<div class="lecture-memo">
 								<h5 class="memo-header">메모</h5>
-
-								<ul v-for="(list, idx) in memoList" :key="idx">
-									<li class="memo-list" v-if="list.code == currentLecture.code">
-										<div
-											class="memo-content"
-											data-toggle="tooltip"
-											data-placement="top"
-											title=""
-											data-original-title="과제 설명 텍스트 과제 설명 텍스트 과제 설명 텍스트"
-										>
-											<i class="material-icons ic-lecture-noti">assignment</i>
-											<span class="lecture-noti-title">{{ list.title }}</span>
-										</div>
-										<div class="memo-btn">
-											<a href=""
-												><i class="material-icons ic-lecture-noti">delete</i></a
-											>
-										</div>
-									</li>
-								</ul>
+								<template v-for="(list, idx) in memoList">
+									<ul
+										v-if="
+											list.memo.length > 0 && list.code == currentLecture.code
+										"
+										:key="idx"
+									>
+										<template v-for="(memo, index) in list.memo">
+											<li class="memo-list" :key="index">
+												<div
+													class="memo-content"
+													data-toggle="tooltip"
+													data-placement="top"
+													v-b-tooltip.hover
+													:title="`${memo.des}`"
+												>
+													<i class="material-icons ic-lecture-noti"
+														>assignment</i
+													>
+													<span class="lecture-noti-title">{{
+														memo.title
+													}}</span>
+												</div>
+												<div class="memo-btn">
+													<a href="#" @click="deleteMemo(list, index)"
+														><i class="material-icons ic-lecture-noti"
+															>delete</i
+														></a
+													>
+												</div>
+											</li>
+										</template>
+									</ul>
+								</template>
 							</div>
 						</div>
 						<div class="modal-footer">
@@ -151,19 +165,26 @@ export default {
 			return this.$store.state.schedule_list[this.$store.state.select_day];
 		},
 	},
+
 	methods: {
 		addMemo: function(val) {
 			let _this = this;
-			console.log(val);
-			let day = this.$store.state.select_day;
-			console.log(this.$store.getters.scheduleTable[day]);
-			this.$store.getters.scheduleTable[day].forEach(function(item) {
+			this.currentLecture.memo.push(val);
+			this.memoList.forEach(function(item, idx, arr) {
 				if (item.code == _this.currentLecture.code) {
-					item.memo.push(val);
+					arr.splice(idx, 1);
+					arr.push(item);
 				}
 			});
-
-			console.log(this.$store.getters.eachDaySchedule);
+		},
+		deleteMemo: function(list, index) {
+			list.memo.splice(index, 1);
+			this.memoList.forEach(function(item, idx, arr) {
+				if (item.code == list.code) {
+					arr.splice(idx, 1);
+					arr.push(item);
+				}
+			});
 		},
 		close: function() {
 			this.$store.commit('EDIT_LECTURE_MEMO_POPUP', []);
@@ -173,7 +194,6 @@ export default {
 			this.$store.commit('DELETE_LECTURE', this.currentLecture.code);
 		},
 	},
-	mounted() {},
 };
 </script>
 

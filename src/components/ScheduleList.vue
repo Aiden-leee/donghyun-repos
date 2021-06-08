@@ -65,10 +65,9 @@
 														</h6>
 													</div>
 
-													<!-- <template v-if="currentSchedule[day].memo.length > 0">
 													<div
-														v-for="memo in currentSchedule[day].memo"
-														:key="memo"
+														v-for="(data, index) in list.memo"
+														:key="index"
 														class="lecture-noti"
 														data-toggle="tooltip"
 														data-placement="top"
@@ -78,11 +77,10 @@
 														<i class="material-icons ic-lecture-noti"
 															>assignment</i
 														>
-														<span class="lecture-noti-title"
-															>과제 제목 텍스트</span
-														>
+														<span class="lecture-noti-title">{{
+															data.title
+														}}</span>
 													</div>
-												</template> -->
 												</a>
 											</div>
 										</li>
@@ -99,8 +97,6 @@
 
 <script>
 export default {
-	props: [],
-	components: {},
 	data() {
 		return {
 			days: ['mon', 'tue', 'wed', 'thu', 'fri'],
@@ -120,10 +116,9 @@ export default {
 
 		scheduleList() {
 			let _this = this;
-
 			// 등록된 강의 목록
 			this.days.forEach(function(item) {
-				_this.$store.getters.scheduleTable[item].forEach(function(list) {
+				_this.$store.state.schedule_list[item].forEach(function(list) {
 					let options = {};
 					let range_time = list.end_time - list.start_time;
 					let start = list.start_time;
@@ -137,7 +132,7 @@ export default {
 				});
 			});
 
-			return this.$store.getters.scheduleTable;
+			return this.$store.state.schedule_list;
 		},
 	},
 };
