@@ -1,2 +1,2 @@
 # donghyun-repos
-[연합] 시간표
+시간표
